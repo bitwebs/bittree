@@ -1,9 +1,9 @@
-const Hyperb = require('../../')
-const hypercore = require('hypercore')
+const BitTree = require('../../')
+const unichain = require('@web4/unichain')
 const split2 = require('split2')
 const fs = require('fs')
 
-const db = new Hyperb(hypercore('./db'))
+const db = new BitTree(unichain('./db'))
 
 main()
 

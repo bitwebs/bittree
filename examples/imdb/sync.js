@@ -1,9 +1,9 @@
-const Hyperb = require('../../')
-const hypercore = require('hypercore')
+const BitTree = require('../../')
+const unichain = require('@web4/unichain')
 
-const db = new Hyperb(hypercore('./db', { sparse: true }))
+const db = new BitTree(unichain('./db', { sparse: true }))
 
-require('@hyperswarm/replicator')(db.feed, {
+require('@web4/replicator')(db.feed, {
   announce: true,
   lookup: true,
   live: true

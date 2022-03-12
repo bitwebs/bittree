@@ -1,11 +1,11 @@
 {
-  "name": "hyperb-imdb-example",
+  "name": "bittree-imdb-example",
   "version": "0.0.0",
   "description": "example data",
   "main": "import.js",
   "dependencies": {
-    "@hyperswarm/replicator": "^1.7.2",
-    "hypercore": "^9.5.0",
+    "@web4/replicator": "^1.0.0",
+    "@web4/unichain": "^1.0.0",
     "split2": "^3.1.1"
   },
   "devDependencies": {},

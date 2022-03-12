@@ -1,7 +1,7 @@
 const codecs = require('codecs')
 const { Readable } = require('streamx')
 const mutexify = require('mutexify/promise')
-const { toPromises, unwrap } = require('hypercore-promisifier')
+const { toPromises, unwrap } = require('@web4/unichain-promisifier')
 
 const RangeIterator = require('./iterators/range')
 const HistoryIterator = require('./iterators/history')
@@ -266,7 +266,7 @@ class BatchEntry extends BlockEntry {
 }
 
 // small abstraction to track feed "get"s so they can be cancelled.
-// we might wanna fold something like this into hypercore
+// we might wanna fold something like this into unichain
 class ActiveRequests {
   constructor (feed) {
     this.feed = feed
@@ -286,7 +286,7 @@ class ActiveRequests {
   }
 }
 
-class HyperBee {
+class BitTree {
   constructor (feed, opts = {}) {
     this._feed = toPromises(feed)
 
@@ -331,7 +331,7 @@ class HyperBee {
     if (ensureHeader) {
       if (this._feed.length === 0 && this._feed.writable && !this.readonly) {
         await this._feed.append(Header.encode({
-          protocol: 'hyperbee',
+          protocol: 'bittree',
           metadata: this.metadata
         }))
       }
@@ -438,7 +438,7 @@ class HyperBee {
   }
 
   checkout (version) {
-    return new HyperBee(this._feed, {
+    return new BitTree(this._feed, {
       _ready: this.ready(),
       _sub: false,
       sep: this.sep,
@@ -463,7 +463,7 @@ class HyperBee {
     const valueEncoding = codecs(opts.valueEncoding || this.valueEncoding)
     const keyEncoding = codecs(opts.keyEncoding || this._unprefixedKeyEncoding)
 
-    return new HyperBee(this._feed, {
+    return new BitTree(this._feed, {
       _ready: this.ready(),
       _sub: true,
       prefix,
@@ -499,7 +499,7 @@ class Batch {
   }
 
   async lock () {
-    if (this.tree.readonly) throw new Error('Hyperbee is marked as read-only')
+    if (this.tree.readonly) throw new Error('BitTree is marked as read-only')
     if (this.locked === null) this.locked = await this.tree.lock()
   }
 
@@ -917,4 +917,4 @@ function prefixEncoding (prefix, keyEncoding) {
 
 function noop () {}
 
-module.exports = HyperBee
+module.exports = BitTree
